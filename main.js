@@ -15,20 +15,24 @@ const lobby = document.getElementById("lobby");
 
 joinBtn.addEventListener("click", () => {
   const name = playerInput.value.trim();
-  if (!name || joined) return;
+  if (!name || joined) return; // Ensure the player hasn't already joined
 
+  // Check if name already exists
   if (players.find((p) => p.name === name)) {
     alert("That name is already taken!");
     return;
   }
 
+  // Add player to the list
   players.push({ name });
   joined = true;
 
+  // Update UI
   joinSection.style.display = "none";
   lobby.style.display = "block";
   renderPlayers();
 
+  // Show start button if it's the first player
   if (players.length === 1) {
     startBtn.style.display = "inline-block"; // First player is host
   }
@@ -89,5 +93,5 @@ function renderRoles() {
     playerList.appendChild(li);
   });
 
-  startBtn.style.display = "none";
+  startBtn.style.display = "none"; // Hide the start button after the game starts
 }
