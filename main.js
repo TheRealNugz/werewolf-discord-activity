@@ -15,20 +15,29 @@ const lobby = document.getElementById("lobby");
 
 console.log("JavaScript is working"); // Check if JS is loaded
 
+// Event listener for the join button
 joinBtn.addEventListener("click", () => {
   console.log("Join button clicked!"); // Check if the event listener is triggered
   const name = playerInput.value.trim();
-  if (!name || joined) return;
 
-  // Check if name already exists
+  // Prevent joining if the name is empty or the player has already joined
+  if (!name || joined) {
+    console.log("Either name is empty or already joined.");
+    return;
+  }
+
+  // Check if the name already exists
   if (players.find((p) => p.name === name)) {
     alert("That name is already taken!");
     return;
   }
 
-  // Add player to the list
+  // Add the first player to the list
   players.push({ name });
   joined = true;
+
+  // Auto-join two more players after the first one joins
+  autoJoinPlayers();
 
   // Update UI
   joinSection.style.display = "none";
@@ -37,13 +46,24 @@ joinBtn.addEventListener("click", () => {
 
   console.log("Lobby is now visible with players:", players); // Check the players array
 
-  // Show start button if it's the first player
-  if (players.length === 1) {
-    startBtn.style.display = "inline-block"; // First player is host
-    console.log("Start button is visible for host");
+  // Show start button if there are 3 or more players
+  if (players.length >= 3) {
+    startBtn.style.display = "inline-block"; // Show start button when there are 3 or more players
+    console.log("Start button is visible");
   }
 });
 
+// Function to automatically add 2 more players when the first player joins
+function autoJoinPlayers() {
+  // If less than 3 players, auto-join two additional players
+  if (players.length === 1 && players.length + 2 <= maxPlayers) {
+    players.push({ name: "Player 2" }); // Add second player
+    players.push({ name: "Player 3" }); // Add third player
+    console.log("Two additional players have joined: Player 2 and Player 3");
+  }
+}
+
+// Event listener for the start button
 startBtn.addEventListener("click", () => {
   console.log("Start button clicked"); // Check if the start button is triggered
   if (players.length < 3) {
@@ -54,6 +74,18 @@ startBtn.addEventListener("click", () => {
   assignRoles();
   renderRoles(); // temp: show everyone’s role (for testing)
 });
+
+// Reset logic to allow for new games (for testing)
+function resetGame() {
+  players = [];
+  joined = false;
+  joinSection.style.display = "block";
+  lobby.style.display = "none";
+  startBtn.style.display = "none";
+  playerInput.value = "";
+  renderPlayers();
+  console.log("Game reset!");
+}
 
 function renderPlayers() {
   console.log("Rendering players"); // Debug line to confirm function is running
@@ -111,3 +143,9 @@ function renderRoles() {
 
   startBtn.style.display = "none"; // Hide the start button after the game starts
 }
+
+// Reset game functionality for testing
+// Uncomment below to test a reset after starting
+// setTimeout(() => {
+//   resetGame();
+// }, 10000);
