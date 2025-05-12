@@ -12,7 +12,6 @@
   </head>
   <body>
     <div class="container">
-      <!-- 👇 Added 'active' here to show this section on load -->
       <div id="join-section" class="section active">
         <h2>Join the Game</h2>
         <input type="text" id="player-name" placeholder="Enter your name" />
@@ -24,8 +23,13 @@
         <div id="player-count">Players: 0</div>
         <ul id="player-list"></ul>
         <button id="start-game">Start Game</button>
+        <!-- Mute/unmute toggle -->
+        <button id="mute-toggle">🔊 Mute Music</button>
       </div>
     </div>
+
+    <!-- 🎵 Background music -->
+    <audio id="lobby-music" src="assets/lobby.mp3" loop></audio>
 
     <script type="module" src="main.js"></script>
   </body>

@@ -14,6 +14,11 @@ const joinSection = document.getElementById("join-section");
 const lobby = document.getElementById("lobby");
 const playerCount = document.getElementById("player-count");
 
+// Background music element and mute button
+const lobbyMusic = document.getElementById("lobby-music");
+const muteToggle = document.getElementById("mute-toggle");
+
+// Join button listener
 joinBtn.addEventListener("click", () => {
   const name = playerInput.value.trim();
 
@@ -27,6 +32,18 @@ joinBtn.addEventListener("click", () => {
   players.push({ name });
   joined = true;
 
+  // Play the music after a user joins
+  lobbyMusic.volume = 0.5;
+  lobbyMusic.currentTime = 0;
+  lobbyMusic
+    .play()
+    .then(() => {
+      console.log("Lobby music started");
+    })
+    .catch((err) => {
+      console.warn("Autoplay failed:", err);
+    });
+
   joinSection.classList.remove("active");
   lobby.classList.add("active");
 
@@ -39,6 +56,15 @@ joinBtn.addEventListener("click", () => {
   updatePlayerCount();
 });
 
+// Mute/unmute button listener
+muteToggle.addEventListener("click", () => {
+  lobbyMusic.muted = !lobbyMusic.muted;
+  muteToggle.textContent = lobbyMusic.muted
+    ? "🔇 Unmute Music"
+    : "🔊 Mute Music";
+});
+
+// Start button listener
 startBtn.addEventListener("click", () => {
   if (players.length < 3) {
     alert("Need at least 3 players to start.");
@@ -49,6 +75,7 @@ startBtn.addEventListener("click", () => {
   renderRoles(); // temporary: shows roles for testing
 });
 
+// Render players in the lobby
 function renderPlayers() {
   playerList.innerHTML = "";
   players.forEach((p) => {
@@ -58,6 +85,7 @@ function renderPlayers() {
   });
 }
 
+// Assign roles to players
 function assignRoles() {
   const total = players.length;
   const numWerewolves = total >= 6 ? 2 : 1;
@@ -76,6 +104,7 @@ function assignRoles() {
   }));
 }
 
+// Shuffle an array randomly
 function shuffleArray(arr) {
   return arr
     .map((value) => ({ value, sort: Math.random() }))
@@ -83,6 +112,7 @@ function shuffleArray(arr) {
     .map(({ value }) => value);
 }
 
+// Render the players with their roles
 function renderRoles() {
   playerList.innerHTML = "";
   players.forEach((p) => {
@@ -94,6 +124,7 @@ function renderRoles() {
   startBtn.style.display = "none";
 }
 
+// Update the player count display
 function updatePlayerCount() {
   playerCount.textContent = `Players: ${players.length}`;
 }
