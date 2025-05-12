@@ -1,0 +1,10 @@
+{
+  "roleTimes": {
+    "werewolf": 180,
+    "seer": 180,
+    "villager": 300
+  },
+
+  "debugMode": true,
+  "debugPlayers": [{ "name": "Debug Player 1" }, { "name": "Debug Player 2" }]
+}
