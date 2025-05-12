@@ -2,10 +2,23 @@ import Seer from "./roles/seer.js";
 import Villager from "./roles/villager.js";
 import Werewolf from "./roles/werewolf.js";
 
-const maxPlayers = 10;
+// Load the config
+let config = {};
+fetch("config.json")
+  .then((response) => response.json())
+  .then((data) => {
+    config = data;
+    console.log("Config loaded:", config);
+    // Now you can apply settings after loading the config
+    setupGame();
+  })
+  .catch((error) => console.error("Error loading config:", error));
+
 let players = [];
 let joined = false;
+const maxPlayers = 10;
 
+// Get HTML elements
 const joinBtn = document.getElementById("join-btn");
 const startBtn = document.getElementById("start-game");
 const playerList = document.getElementById("player-list");
@@ -13,22 +26,26 @@ const playerInput = document.getElementById("player-name");
 const joinSection = document.getElementById("join-section");
 const lobby = document.getElementById("lobby");
 const playerCount = document.getElementById("player-count");
-
-// Background music element and mute button
 const lobbyMusic = document.getElementById("lobby-music");
 const muteToggle = document.getElementById("mute-toggle");
 
-// Game state
-let gameState = "lobby"; // lobby -> werewolf -> seer -> villager
+let gameState = "lobby";
 let werewolfVotes = [];
 let seerVote = null;
 let villagerVotes = [];
 let voteSkipped = false;
 
-// Timers (in seconds)
-let werewolfTimer = 180; // 3 minutes
-let seerTimer = 180; // 3 minutes
-let villagerTimer = 300; // 5 minutes
+let werewolfTimer = config.roleTimes.werewolf; // 3 minutes
+let seerTimer = config.roleTimes.seer; // 3 minutes
+let villagerTimer = config.roleTimes.villager; // 5 minutes
+
+function setupGame() {
+  // If in debug mode, automatically add 2 extra players after you join
+  if (config.debugMode) {
+    players.push(...config.debugPlayers);
+  }
+  renderPlayers();
+}
 
 // Join button listener
 joinBtn.addEventListener("click", () => {
@@ -259,32 +276,25 @@ function revealSeerChoice() {
 // Update the state every second
 function gameLoop() {
   setInterval(() => {
-    if (gameState === "werewolf") werewolfTimer--;
-    else if (gameState === "seer") seerTimer--;
-    else if (gameState === "villager") villagerTimer--;
-
-    updateTimer();
-
-    if (werewolfTimer <= 0 || seerTimer <= 0 || villagerTimer <= 0) {
-      moveToNextPhase();
+    if (gameState === "werewolf") {
+      werewolfTimer--;
+      if (werewolfTimer <= 0) {
+        gameState = "seer";
+        werewolfTimer = config.roleTimes.werewolf;
+      }
+    } else if (gameState === "seer") {
+      seerTimer--;
+      if (seerTimer <= 0) {
+        gameState = "villager";
+        seerTimer = config.roleTimes.seer;
+      }
+    } else if (gameState === "villager") {
+      villagerTimer--;
+      if (villagerTimer <= 0) {
+        gameState = "werewolf";
+        villagerTimer = config.roleTimes.villager;
+      }
     }
+    updateTimer();
   }, 1000);
-}
-
-// Switch game phase
-function moveToNextPhase() {
-  if (gameState === "werewolf") {
-    gameState = "seer";
-    werewolfVotes = [];
-    werewolfTimer = 180; // Reset timer
-  } else if (gameState === "seer") {
-    gameState = "villager";
-    seerVote = null;
-    seerTimer = 180; // Reset timer
-  } else if (gameState === "villager") {
-    gameState = "werewolf";
-    villagerVotes = [];
-    voteSkipped = false;
-    villagerTimer = 300; // Reset timer
-  }
 }
