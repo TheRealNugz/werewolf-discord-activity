@@ -14,17 +14,10 @@ const joinSection = document.getElementById("join-section");
 const lobby = document.getElementById("lobby");
 const playerCount = document.getElementById("player-count");
 
-console.log("JavaScript is working");
-
-// Event listener for the join button
 joinBtn.addEventListener("click", () => {
-  console.log("Join button clicked!");
   const name = playerInput.value.trim();
 
-  if (!name || joined) {
-    console.log("Either name is empty or already joined.");
-    return;
-  }
+  if (!name || joined) return;
 
   if (players.find((p) => p.name === name)) {
     alert("That name is already taken!");
@@ -36,14 +29,13 @@ joinBtn.addEventListener("click", () => {
 
   joinSection.classList.remove("active");
   lobby.classList.add("active");
+
   renderPlayers();
 
-  // Show start button if it's the first player
   if (players.length === 1) {
     startBtn.style.display = "inline-block";
   }
 
-  // Update player count
   updatePlayerCount();
 });
 
@@ -54,7 +46,7 @@ startBtn.addEventListener("click", () => {
   }
 
   assignRoles();
-  renderRoles(); // temp: show everyone’s role (for testing)
+  renderRoles(); // temporary: shows roles for testing
 });
 
 function renderPlayers() {
@@ -68,8 +60,8 @@ function renderPlayers() {
 
 function assignRoles() {
   const total = players.length;
-  let numWerewolves = total >= 6 ? 2 : 1;
-  let numSeers = 1;
+  const numWerewolves = total >= 6 ? 2 : 1;
+  const numSeers = 1;
   let roles = [];
 
   roles = roles.concat(Array(numWerewolves).fill(Werewolf));
