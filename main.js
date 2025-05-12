@@ -35,13 +35,17 @@ joinBtn.addEventListener("click", () => {
   lobby.style.display = "block";
   renderPlayers();
 
+  console.log("Lobby is now visible with players:", players); // Check the players array
+
   // Show start button if it's the first player
   if (players.length === 1) {
     startBtn.style.display = "inline-block"; // First player is host
+    console.log("Start button is visible for host");
   }
 });
 
 startBtn.addEventListener("click", () => {
+  console.log("Start button clicked"); // Check if the start button is triggered
   if (players.length < 3) {
     alert("Need at least 3 players to start.");
     return;
@@ -52,15 +56,19 @@ startBtn.addEventListener("click", () => {
 });
 
 function renderPlayers() {
+  console.log("Rendering players"); // Debug line to confirm function is running
   playerList.innerHTML = "";
   players.forEach((p) => {
     const li = document.createElement("li");
     li.textContent = p.name;
     playerList.appendChild(li);
   });
+
+  console.log("Players rendered:", players); // Check what players are rendered in the list
 }
 
 function assignRoles() {
+  console.log("Assigning roles"); // Debug line to confirm function is running
   const total = players.length;
   let numWerewolves = total >= 6 ? 2 : 1;
   let numSeers = 1;
@@ -79,6 +87,8 @@ function assignRoles() {
     ...p,
     role: new roles[i](), // Make sure roles are instantiated here
   }));
+
+  console.log("Roles assigned:", players); // Log players with their assigned roles
 }
 
 function shuffleArray(arr) {
@@ -89,12 +99,15 @@ function shuffleArray(arr) {
 }
 
 function renderRoles() {
+  console.log("Rendering roles"); // Debug line to confirm function is running
   playerList.innerHTML = "";
   players.forEach((p) => {
     const li = document.createElement("li");
     li.textContent = `${p.name} — ${p.role.config.name}`; // Show the role's name
     playerList.appendChild(li);
   });
+
+  console.log("Roles rendered:", players); // Log the players with their roles
 
   startBtn.style.display = "none"; // Hide the start button after the game starts
 }
