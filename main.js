@@ -1,3 +1,7 @@
+import Seer from "./roles/seer.js";
+import Villager from "./roles/villager.js";
+import Werewolf from "./roles/werewolf.js";
+
 const maxPlayers = 10;
 let players = [];
 let joined = false;
@@ -36,8 +40,8 @@ startBtn.addEventListener("click", () => {
     return;
   }
 
-  alert("Game starting! (Next: role assignment)");
-  // TODO: Transition to role assignment and game logic
+  assignRoles();
+  renderRoles(); // temp: show everyone’s role (for testing)
 });
 
 function renderPlayers() {
@@ -47,4 +51,43 @@ function renderPlayers() {
     li.textContent = p.name;
     playerList.appendChild(li);
   });
+}
+
+function assignRoles() {
+  const total = players.length;
+  let numWerewolves = total >= 6 ? 2 : 1;
+  let numSeers = 1;
+  let roles = [];
+
+  // Create role pool
+  roles = roles.concat(Array(numWerewolves).fill(Werewolf));
+  roles = roles.concat(Array(numSeers).fill(Seer));
+  roles = roles.concat(Array(total - roles.length).fill(Villager));
+
+  // Shuffle roles
+  roles = shuffleArray(roles);
+
+  // Assign roles to players
+  players = players.map((p, i) => ({
+    ...p,
+    role: new roles[i](),
+  }));
+}
+
+function shuffleArray(arr) {
+  return arr
+    .map((value) => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
+}
+
+function renderRoles() {
+  playerList.innerHTML = "";
+  players.forEach((p) => {
+    const li = document.createElement("li");
+    li.textContent = `${p.name} — ${p.role.config.name}`;
+    playerList.appendChild(li);
+  });
+
+  startBtn.style.display = "none";
 }
