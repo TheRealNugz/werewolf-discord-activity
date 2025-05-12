@@ -1,0 +1,32 @@
+body {
+  font-family: sans-serif;
+  background: #1e1e2f;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+#user-list {
+  margin: 20px 0;
+}
+
+#user-list div {
+  margin: 5px;
+  background: #2e2e40;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background: #4e9eff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #3b89db;
+}
