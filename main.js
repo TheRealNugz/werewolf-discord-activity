@@ -13,9 +13,12 @@ const playerInput = document.getElementById("player-name");
 const joinSection = document.getElementById("join-section");
 const lobby = document.getElementById("lobby");
 
+console.log("JavaScript is working"); // Check if JS is loaded
+
 joinBtn.addEventListener("click", () => {
+  console.log("Join button clicked!"); // Check if the event listener is triggered
   const name = playerInput.value.trim();
-  if (!name || joined) return; // Ensure the player hasn't already joined
+  if (!name || joined) return;
 
   // Check if name already exists
   if (players.find((p) => p.name === name)) {
@@ -74,7 +77,7 @@ function assignRoles() {
   // Assign roles to players
   players = players.map((p, i) => ({
     ...p,
-    role: new roles[i](),
+    role: new roles[i](), // Make sure roles are instantiated here
   }));
 }
 
@@ -89,7 +92,7 @@ function renderRoles() {
   playerList.innerHTML = "";
   players.forEach((p) => {
     const li = document.createElement("li");
-    li.textContent = `${p.name} — ${p.role.config.name}`;
+    li.textContent = `${p.name} — ${p.role.config.name}`; // Show the role's name
     playerList.appendChild(li);
   });
 
