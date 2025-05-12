@@ -1,6 +1,8 @@
 # Werewolf Game
 
-A fun and interactive multiplayer game based on the classic social deduction game "Werewolf," built using JavaScript, HTML, and CSS. Players take on the roles of different characters, including Werewolves, Villagers, and Seers, and vote to eliminate each other in a battle of wits. 
+A fun and interactive multiplayer game based on the classic social deduction game "Werewolf," built using JavaScript, HTML, and CSS. Players take on the roles of different characters, including Werewolves, Villagers, and Seers, and vote to eliminate each other in a battle of wits.
+
+**Note**: This project includes a Discord activity integration, but it is still being worked on and is not yet fully functional.
 
 ## Features
 
@@ -17,7 +19,7 @@ A fun and interactive multiplayer game based on the classic social deduction gam
 - **Werewolf**: Has 3 minutes to vote for the victim.
 - **Seer**: Has 3 minutes to choose someone to look at.
 - **Villager**: Has 5 minutes to vote for a victim or skip voting.
-  
+
 You can adjust these times via the `config.json` file.
 
 ## Setup
